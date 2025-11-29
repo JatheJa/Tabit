@@ -1,0 +1,4 @@
+const SUPABASE_URL = "https://tabit.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmYXNyZmVxdWxldWx3a2FmcnZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDkzMDgsImV4cCI6MjA3NzkyNTMwOH0.EOIn-3HhD9511U6aiDgjcYuEluSz5HR3TjqbTT5C8is";
+
+window.sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

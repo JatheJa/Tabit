@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabit - Register</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="register-container">
+        <h1>Please Register your account</h1>
+        <form id="register-form"> 
+            <div class="input-group">
+                <label for="email">Email:</label> 
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
+            </div> 
+            <div class="input-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" name="confirm_password" id="confirm_password" required> 
+            </div> 
+            <button type="submit">Create account</button> 
+        </form>
+        <p>Already Have an account? <a href="index.html">Login here.</a></p> 
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
