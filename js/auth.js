@@ -17,7 +17,8 @@
     var res = await sb.auth.signUp({ email: email, password: password });
     if (res.error) return alert(res.error.message);
     // If confirm emails are disabled in dev, session is active after sign-up
-    window.location.href = 'tracker.html';  
+    window.location.href = 'index.html';  
+  };
 
   window.logout = async function () {
     try { await sb.auth.signOut(); } catch (e) { console.error(e); }

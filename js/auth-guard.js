@@ -8,7 +8,7 @@
       
       // If no session, redirect to login
       if (!session) {
-        window.location.href = '/index.html';
+        window.location.href = 'index.html';  
         return;
       }
       
@@ -17,7 +17,7 @@
       
     } catch (error) {
       console.error('Auth check failed:', error);
-      window.location.href = '/index.html';
+      window.location.href = 'index.html'; 
     }
   });
 })();
