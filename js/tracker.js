@@ -8,6 +8,8 @@
     return out && out.data && out.data.user ? out.data.user.id : null;
   }
 
+  
+
   // ===== Habits CRUD =====
   window.createHabit = async function (h) {
     var payload = {
@@ -122,8 +124,18 @@
     return r.data || [];
   };
 
-  // ===== Optional: minimal DOM helpers for picker =====
-  // You can wire these to your modal/buttons.
+  window.addEventListener('tabitSettingsChanged', (event) => {
+    const { key, value } = event.detail;
+    console.log(`Setting ${key} changed to:`, value);
+    
+    // You can add specific reactions here
+    // For example, if accent color changes, update specific elements
+    if (key === 'accentColor') {
+        // Any page-specific updates can go here
+        console.log('Accent color updated across all pages!');
+    }
+});
+  
   window.renderIconPicker = async function (containerEl, onChoose) {
     containerEl.innerHTML = '';
     var defaults = await listDefaultIcons();

@@ -33,4 +33,17 @@
     if (r.error) alert(r.error.message);
     return true;
   };
+
+  window.addEventListener('tabitSettingsChanged', (event) => {
+    const { key, value } = event.detail;
+    console.log(`Setting ${key} changed to:`, value);
+    
+    // You can add specific reactions here
+    // For example, if accent color changes, update specific elements
+    if (key === 'accentColor') {
+        // Any page-specific updates can go here
+        console.log('Accent color updated across all pages!');
+    }
+});
+
 })();

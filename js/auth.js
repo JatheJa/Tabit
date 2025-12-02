@@ -8,7 +8,7 @@
     if (!minLength(password, 6)) return alert('Password too short.');
     var res = await sb.auth.signInWithPassword({ email: email, password: password });
     if (res.error) return alert(res.error.message);
-    window.location.href = '/home.html';
+    window.location.href = '/tracker.html';
   };
 
   window.register = async function (email, password) {
@@ -17,7 +17,7 @@
     var res = await sb.auth.signUp({ email: email, password: password });
     if (res.error) return alert(res.error.message);
     // If confirm emails are disabled in dev, session is active after sign-up
-    window.location.href = '/home.html';
+    window.location.href = '/tracker.html';
   };
 
   window.logout = async function () {

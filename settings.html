@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Tabit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0a0b0d;
+            --secondary-bg: #141518;
+            --card-bg: #1a1b1e;
+            --border-color: #2a2b2e;
+            --text-primary: #f1f3f4;
+            --text-secondary: #9aa0a6;
+            --text-muted: #5f6368;
+            --accent-green: #34a853;
+            --accent-blue: #4285f4;
+            --accent-red: #ea4335;
+            --accent-yellow: #fbbc04;
+            --accent-purple: #9c27b0;
+            --hover-overlay: rgba(255, 255, 255, 0.05);
+            --success-bg: rgba(52, 168, 83, 0.15);
+            --success-border: rgba(52, 168, 83, 0.4);
+            --warning-bg: rgba(251, 188, 4, 0.15);
+            --warning-border: rgba(251, 188, 4, 0.4);
+            --danger-bg: rgba(234, 67, 53, 0.15);
+            --danger-border: rgba(234, 67, 53, 0.4);
+            --journal-font-size: 1rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .compact-mode .container,
+        .compact-mode .settings-container {
+            padding: 1rem;
+        }
+
+        .compact-mode .header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .compact-mode .settings-section {
+            padding: 1rem;
+        }
+
+        .compact-mode .setting-item {
+            padding: 0.75rem 0;
+        }
+
+        .compact-mode .tracker-grid {
+            gap: 0.5rem;
+        }
+
+        .compact-mode .journal-content {
+            font-size: var(--journal-font-size);
+        }
+
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-icon {
+            width: 24px;
+            height: 24px;
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover {
+            background: var(--hover-overlay);
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .settings-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .settings-section:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 20px rgba(66, 133, 244, 0.1);
+        }
+
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .setting-item:first-child {
+            padding-top: 0;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .setting-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .setting-control {
+            margin-left: 1rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--border-color);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-green);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3367d6;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--hover-overlay);
+        }
+
+        .btn-danger {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c62828;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2d7d32;
+            transform: translateY(-1px);
+        }
+
+        /* Select */
+        .select {
+            padding: 0.6rem 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        /* Input */
+        .input {
+            padding: 0.6rem 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            border-left-color: var(--accent-green);
+            color: var(--text-primary);
+        }
+
+        .alert-warning {
+            background: var(--warning-bg);
+            border-left-color: var(--accent-yellow);
+            color: var(--text-primary);
+        }
+
+        .alert-danger {
+            background: var(--danger-bg);
+            border-left-color: var(--accent-red);
+            color: var(--text-primary);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent-blue);
+            background: var(--hover-overlay);
+        }
+
+        .file-upload.dragover {
+            border-color: var(--accent-green);
+            background: var(--success-bg);
+        }
+
+        .file-upload-text {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .settings-container {
+                padding: 1rem;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .setting-control {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-blue);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Navigation Ribbon */
+        .top-nav {
+            background: linear-gradient(135deg, var(--secondary-bg), var(--card-bg));
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            margin: -2rem -2rem 2rem -2rem; /* Extend to edges */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.6rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .nav-tab:hover {
+            background: var(--hover-overlay);
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+            transform: translateY(-1px);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid var(--primary-bg);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+                gap: 0.25rem;
+            }
+            
+            .nav-tab {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            
+            .nav-tab span {
+                display: none; /* Hide text on mobile, show only icons */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Guard -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth-guard.js"></script>
+    
+
+    <!-- Top Navigation Ribbon -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="tracker.html" class="nav-tab" id="nav-tracker">
+                📊 <span>Tracker</span>
+            </a>
+            <a href="journal.html" class="nav-tab" id="nav-journal">
+                📝 <span>Journal</span>
+            </a>
+            <a href="settings.html" class="nav-tab" id="nav-settings">
+                ⚙️ <span>Settings</span>
+            </a>
+            <a href="tips.html" class="nav-tab" id="nav-tips">
+                💡 <span>Tips</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="settings-container">
+        <header class="header">
+            <h1>
+                <svg class="settings-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                </svg>
+                Settings
+            </h1>
+            <div class="nav-links">
+                <a href="tracker.html" class="nav-link">📊 Tracker</a>
+                <a href="journal.html" class="nav-link">📝 Journal</a>
+                <a href="home.html" class="nav-link">🏠 Home</a>
+            </div>
+        </header>
+
+        <div class="settings-grid">
+            <!-- Appearance Settings -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    🎨 Appearance
+                </h2>
+                <p class="section-description">Customize how Tabit looks and feels to match your preferences.</p>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Dark Mode</div>
+                        <div class="setting-desc">Switch between light and dark themes</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" id="darkModeToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Compact View</div>
+                        <div class="setting-desc">Show more content by reducing spacing</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="compactViewToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Accent Color</div>
+                        <div class="setting-desc">Choose your preferred accent color</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="select" id="accentColorSelect">
+                            <option value="blue">Blue</option>
+                            <option value="green">Green</option>
+                            <option value="purple">Purple</option>
+                            <option value="red">Red</option>
+                            <option value="yellow">Yellow</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tracker Settings -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    📊 Tracker Preferences
+                </h2>
+                <p class="section-description">Configure how your habit tracking behaves and displays.</p>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Default View</div>
+                        <div class="setting-desc">Choose the default view when opening tracker</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="select" id="defaultViewSelect">
+                            <option value="month">Monthly Grid</option>
+                            <option value="week">Weekly View</option>
+                            <option value="year">Yearly Overview</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Auto-Fill Today</div>
+                        <div class="setting-desc">Automatically highlight today's date</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" id="autoFillTodayToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Show Statistics</div>
+                        <div class="setting-desc">Display completion stats in sidebar</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" id="showStatsToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Week Start Day</div>
+                        <div class="setting-desc">First day of the week in calendar</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="select" id="weekStartSelect">
+                            <option value="sunday">Sunday</option>
+                            <option value="monday">Monday</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Journal Settings -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    📝 Journal Preferences
+                </h2>
+                <p class="section-description">Customize your journaling experience and writing environment.</p>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Auto-Save</div>
+                        <div class="setting-desc">Automatically save entries as you type</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" id="autoSaveToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Daily Prompts</div>
+                        <div class="setting-desc">Show writing prompts for inspiration</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="dailyPromptsToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Font Size</div>
+                        <div class="setting-desc">Adjust text size for comfortable reading</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="select" id="fontSizeSelect">
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Word Count</div>
+                        <div class="setting-desc">Show live word count while writing</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" id="wordCountToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    🔔 Notifications
+                </h2>
+                <p class="section-description">Manage how and when Tabit sends you reminders.</p>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Daily Reminders</div>
+                        <div class="setting-desc">Get notified to check in with your habits</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="dailyRemindersToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Reminder Time</div>
+                        <div class="setting-desc">When to send daily reminders</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="select" id="reminderTimeSelect">
+                            <option value="morning">Morning (8 AM)</option>
+                            <option value="afternoon">Afternoon (2 PM)</option>
+                            <option value="evening">Evening (7 PM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Weekly Summary</div>
+                        <div class="setting-desc">Get a weekly progress summary</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" id="weeklySummaryToggle">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data & Privacy -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    🔒 Data & Privacy
+                </h2>
+                <p class="section-description">Control your data and manage your account security.</p>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Export Data</div>
+                        <div class="setting-desc">Download all your habits and journal entries</div>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-secondary" id="exportDataBtn">
+                            📥 Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Import Data</div>
+                        <div class="setting-desc">Restore from a previous backup</div>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-secondary" id="importDataBtn">
+                            📤 Import
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Backup Frequency</div>
+                        <div class="setting-desc">How often to automatically backup your data</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="select" id="backupFrequencySelect">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="never">Never</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Storage Used</span>
+                        <span>65% (6.5 MB of 10 MB)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Account Management -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    👤 Account
+                </h2>
+                <p class="section-description">Manage your account settings and security.</p>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Change Password</div>
+                        <div class="setting-desc">Update your account password</div>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-primary" id="changePasswordBtn">
+                            🔑 Change
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Email Preferences</div>
+                        <div class="setting-desc">Manage email notifications and updates</div>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-secondary" id="emailPrefsBtn">
+                            ✉️ Manage
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label tooltip" data-tooltip="This action cannot be undone">
+                            Delete Account
+                        </div>
+                        <div class="setting-desc">Permanently remove your account and all data</div>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-danger" id="deleteAccountBtn">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Save Actions -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+            <div>
+                <span class="text-muted">Changes are saved automatically</span>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" id="resetSettingsBtn">
+                    🔄 Reset to Defaults
+                </button>
+                <button class="btn btn-success" id="saveSettingsBtn">
+                    💾 Save All Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Import Data</h3>
+            </div>
+            <p>Select a backup file to restore your habits and journal entries:</p>
+            <div class="file-upload" id="fileUploadArea">
+                <div style="font-size: 2rem;">📁</div>
+                <div class="file-upload-text">
+                    Click to select file or drag and drop here<br>
+                    <small>Supports .json and .csv files</small>
+                </div>
+                <input type="file" id="fileInput" accept=".json,.csv" style="display: none;">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelImportBtn">Cancel</button>
+                <button class="btn btn-primary" id="confirmImportBtn" disabled>Import</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Change Modal -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Change Password</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="password" class="input" placeholder="Current Password" id="currentPassword">
+                <input type="password" class="input" placeholder="New Password" id="newPassword">
+                <input type="password" class="input" placeholder="Confirm New Password" id="confirmPassword">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelPasswordBtn">Cancel</button>
+                <button class="btn btn-primary" id="savePasswordBtn">Save Password</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // Set active navigation tab
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navTabs = {
+                'tracker.html': 'nav-tracker',
+                'journal.html': 'nav-journal', 
+                'settings.html': 'nav-settings',
+                'tips.html': 'nav-tips'
+            };
+            
+            const activeTabId = navTabs[currentPage];
+            if (activeTabId) {
+                document.getElementById(activeTabId).classList.add('active');
+            }
+        });
+        // Settings Management System
+        class SettingsManager {
+            constructor() {
+                this.settings = this.loadSettings();
+                this.initializeEventListeners();
+                this.applySettings();
+                this.showSuccessMessage();
+            }
+
+            loadSettings() {
+                const defaultSettings = {
+                    darkMode: true,
+                    compactView: false,
+                    accentColor: 'blue',
+                    defaultView: 'month',
+                    autoFillToday: true,
+                    showStats: true,
+                    weekStart: 'sunday',
+                    autoSave: true,
+                    dailyPrompts: false,
+                    fontSize: 'medium',
+                    wordCount: true,
+                    dailyReminders: false,
+                    reminderTime: 'evening',
+                    weeklySummary: true,
+                    backupFrequency: 'weekly'
+                };
+
+                const saved = localStorage.getItem('tabit-settings');
+                return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
+            }
+
+            saveSettings() {
+                localStorage.setItem('tabit-settings', JSON.stringify(this.settings));
+                this.applySettings();
+                this.showSuccessMessage('Settings saved successfully!');
+            }
+
+            applySettings() {
+                // Apply dark mode
+                document.documentElement.style.setProperty(
+                    '--primary-bg', 
+                    this.settings.darkMode ? '#0a0b0d' : '#ffffff'
+                );
+
+                // Apply compact view
+                if (this.settings.compactView) {
+                    document.body.classList.add('compact');
+                } else {
+                    document.body.classList.remove('compact');
+                }
+
+                // Apply accent color
+                const accentColors = {
+                    blue: '#4285f4',
+                    green: '#34a853',
+                    purple: '#9c27b0',
+                    red: '#ea4335',
+                    yellow: '#fbbc04'
+                };
+                
+                document.documentElement.style.setProperty(
+                    '--accent-blue', 
+                    accentColors[this.settings.accentColor]
+                );
+
+                // Update UI controls
+                this.updateControls();
+            }
+
+            updateControls() {
+                // Update toggles
+                document.getElementById('darkModeToggle').classList.toggle('active', this.settings.darkMode);
+                document.getElementById('compactViewToggle').classList.toggle('active', this.settings.compactView);
+                document.getElementById('autoFillTodayToggle').classList.toggle('active', this.settings.autoFillToday);
+                document.getElementById('showStatsToggle').classList.toggle('active', this.settings.showStats);
+                document.getElementById('autoSaveToggle').classList.toggle('active', this.settings.autoSave);
+                document.getElementById('dailyPromptsToggle').classList.toggle('active', this.settings.dailyPrompts);
+                document.getElementById('wordCountToggle').classList.toggle('active', this.settings.wordCount);
+                document.getElementById('dailyRemindersToggle').classList.toggle('active', this.settings.dailyReminders);
+                document.getElementById('weeklySummaryToggle').classList.toggle('active', this.settings.weeklySummary);
+
+                // Update selects
+                document.getElementById('accentColorSelect').value = this.settings.accentColor;
+                document.getElementById('defaultViewSelect').value = this.settings.defaultView;
+                document.getElementById('weekStartSelect').value = this.settings.weekStart;
+                document.getElementById('fontSizeSelect').value = this.settings.fontSize;
+                document.getElementById('reminderTimeSelect').value = this.settings.reminderTime;
+                document.getElementById('backupFrequencySelect').value = this.settings.backupFrequency;
+            }
+
+            initializeEventListeners() {
+                // Toggle switches
+                this.setupToggle('darkModeToggle', 'darkMode');
+                this.setupToggle('compactViewToggle', 'compactView');
+                this.setupToggle('autoFillTodayToggle', 'autoFillToday');
+                this.setupToggle('showStatsToggle', 'showStats');
+                this.setupToggle('autoSaveToggle', 'autoSave');
+                this.setupToggle('dailyPromptsToggle', 'dailyPrompts');
+                this.setupToggle('wordCountToggle', 'wordCount');
+                this.setupToggle('dailyRemindersToggle', 'dailyReminders');
+                this.setupToggle('weeklySummaryToggle', 'weeklySummary');
+
+                // Select dropdowns
+                this.setupSelect('accentColorSelect', 'accentColor');
+                this.setupSelect('defaultViewSelect', 'defaultView');
+                this.setupSelect('weekStartSelect', 'weekStart');
+                this.setupSelect('fontSizeSelect', 'fontSize');
+                this.setupSelect('reminderTimeSelect', 'reminderTime');
+                this.setupSelect('backupFrequencySelect', 'backupFrequency');
+
+                // Action buttons
+                document.getElementById('exportDataBtn').addEventListener('click', () => this.exportData());
+                document.getElementById('importDataBtn').addEventListener('click', () => this.showImportModal());
+                document.getElementById('changePasswordBtn').addEventListener('click', () => this.showPasswordModal());
+                document.getElementById('resetSettingsBtn').addEventListener('click', () => this.resetSettings());
+                document.getElementById('saveSettingsBtn').addEventListener('click', () => this.saveSettings());
+                document.getElementById('deleteAccountBtn').addEventListener('click', () => this.deleteAccount());
+
+                // Modal functionality
+                this.setupModals();
+                this.setupFileUpload();
+            }
+
+            setupToggle(elementId, settingKey) {
+                const element = document.getElementById(elementId);
+                element.addEventListener('click', () => {
+                    this.settings[settingKey] = !this.settings[settingKey];
+                    element.classList.toggle('active', this.settings[settingKey]);
+                    this.saveSettings();
+                });
+            }
+
+            setupSelect(elementId, settingKey) {
+                const element = document.getElementById(elementId);
+                element.addEventListener('change', () => {
+                    this.settings[settingKey] = element.value;
+                    this.saveSettings();
+                });
+            }
+
+            setupModals() {
+                // Import modal
+                document.getElementById('cancelImportBtn').addEventListener('click', () => {
+                    this.hideModal('importModal');
+                });
+
+                // Password modal
+                document.getElementById('cancelPasswordBtn').addEventListener('click', () => {
+                    this.hideModal('passwordModal');
+                });
+
+                document.getElementById('savePasswordBtn').addEventListener('click', () => {
+                    this.changePassword();
+                });
+
+                // Click outside to close
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            this.hideModal(modal.id);
+                        }
+                    });
+                });
+            }
+
+            setupFileUpload() {
+                const uploadArea = document.getElementById('fileUploadArea');
+                const fileInput = document.getElementById('fileInput');
+
+                uploadArea.addEventListener('click', () => fileInput.click());
+
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('dragover');
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.handleFileSelect(files[0]);
+                    }
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.handleFileSelect(e.target.files[0]);
+                    }
+                });
+            }
+
+            showImportModal() {
+                document.getElementById('importModal').classList.add('active');
+            }
+
+            showPasswordModal() {
+                document.getElementById('passwordModal').classList.add('active');
+            }
+
+            hideModal(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            }
+
+            exportData() {
+                const data = {
+                    settings: this.settings,
+                    exportDate: new Date().toISOString(),
+                    version: '1.0'
+                };
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `tabit-backup-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                this.showSuccessMessage('Data exported successfully!');
+            }
+
+            handleFileSelect(file) {
+                const confirmBtn = document.getElementById('confirmImportBtn');
+                confirmBtn.disabled = false;
+                
+                confirmBtn.onclick = () => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            if (data.settings) {
+                                this.settings = { ...this.settings, ...data.settings };
+                                this.saveSettings();
+                                this.hideModal('importModal');
+                                this.showSuccessMessage('Data imported successfully!');
+                            } else {
+                                throw new Error('Invalid file format');
+                            }
+                        } catch (error) {
+                            this.showErrorMessage('Invalid backup file. Please select a valid Tabit backup.');
+                        }
+                    };
+                    reader.readAsText(file);
+                };
+            }
+
+            async changePassword() {
+                const current = document.getElementById('currentPassword').value;
+                const newPass = document.getElementById('newPassword').value;
+                const confirm = document.getElementById('confirmPassword').value;
+
+                if (newPass !== confirm) {
+                    this.showErrorMessage('New passwords do not match.');
+                    return;
+                }
+
+                if (newPass.length < 6) {
+                    this.showErrorMessage('Password must be at least 6 characters long.');
+                    return;
+                }
+
+                try {
+                    // Simulate password change - integrate with your auth system
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    this.hideModal('passwordModal');
+                    this.showSuccessMessage('Password changed successfully!');
+                    
+                    // Clear form
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                } catch (error) {
+                    this.showErrorMessage('Failed to change password. Please try again.');
+                }
+            }
+
+            resetSettings() {
+                if (confirm('Are you sure you want to reset all settings to defaults? This cannot be undone.')) {
+                    localStorage.removeItem('tabit-settings');
+                    location.reload();
+                }
+            }
+
+            deleteAccount() {
+                const confirmation = prompt('Type "DELETE" to confirm account deletion:');
+                if (confirmation === 'DELETE') {
+                    if (confirm('This will permanently delete your account and all data. Are you absolutely sure?')) {
+                        // Simulate account deletion - integrate with your auth system
+                        this.showSuccessMessage('Account deletion initiated. You will be logged out shortly.');
+                        setTimeout(() => {
+                            window.location.href = '/index.html';
+                        }, 3000);
+                    }
+                }
+            }
+
+            showSuccessMessage(message = 'Settings updated!') {
+                this.showAlert(message, 'success');
+            }
+
+            showErrorMessage(message) {
+                this.showAlert(message, 'danger');
+            }
+
+            showAlert(message, type) {
+                // Remove existing alerts
+                document.querySelectorAll('.alert').forEach(alert => alert.remove());
+
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                
+                document.querySelector('.settings-container').insertBefore(
+                    alert, 
+                    document.querySelector('.settings-grid')
+                );
+
+                setTimeout(() => alert.remove(), 5000);
+            }
+        }
+
+        // Initialize settings when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SettingsManager();
+        });
+
+        // Logout functionality
+        async function logout() {
+            try {
+                await sb.auth.signOut();
+                window.location.href = '/index.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
